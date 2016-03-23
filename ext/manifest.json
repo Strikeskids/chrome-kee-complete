@@ -1,0 +1,24 @@
+{
+    "manifest_version": 2,
+    "name": "Chrome Kee Complete",
+    "version": "0.0.1",
+
+    "default_locale": "en",
+    "description": "Autocomplete passwords from kdbx files in Google Chrome",
+
+    "background": {
+        "scripts": ["bootstrap.js"],
+        "persistent": false
+    },
+    "permission": {
+        "activeTab"
+    },
+    "commands": {
+        "_execute_page_action": {
+            "suggested_key": {
+                "mac": "Command+Shift+Space",
+                "default": "Ctrl+Shift+Space"
+            }
+        }
+    }
+}
