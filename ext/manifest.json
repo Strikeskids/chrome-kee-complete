@@ -6,13 +6,19 @@
     "default_locale": "en",
     "description": "Autocomplete passwords from kdbx files in Google Chrome",
 
+    "permission": [
+        "activeTab"
+    ],
+    
+    "page_action": {
+        "default_title": "Chrome Kee Complete",
+        "default_popup": "popup.html"
+    },
     "background": {
         "scripts": ["bootstrap.js"],
         "persistent": false
     },
-    "permission": {
-        "activeTab"
-    },
+
     "commands": {
         "_execute_page_action": {
             "suggested_key": {
