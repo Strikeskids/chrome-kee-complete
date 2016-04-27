@@ -4,7 +4,7 @@ function setup() {
     const passwordFieldRule = {
         conditions: [
             new chrome.declarativeContent.PageStateMatcher({
-                css: ["input[type='password']"],
+                css: ['input[type="password"]'],
             }),
         ],
         actions: [
