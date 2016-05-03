@@ -24,7 +24,7 @@
             "suggested_key": {
                 "mac": "Command+Shift+Space",
                 "default": "Ctrl+Shift+Space"
-            },
+            }
         }
     }
 }
