@@ -6,11 +6,10 @@ import Html exposing (Html, div, text)
 type alias Model =
   {}
 
-type alias SubPort result msg = (result -> msg) -> Sub msg
-
 {- TODO: Fill -}
 type alias Entry =
-  {}
+  { uuid : String
+  , fields : }
 
 type Msg
   = Cry
@@ -27,14 +26,6 @@ model = {}
 init : (Model, Cmd Msg)
 init =
   (model, Cmd.none)
-
-port unlock : String -> Cmd msg
-port readEntries : () -> Cmd msg
-port fillEntry : Int -> Cmd msg
-
-port unlocked : (Bool -> msg) -> Sub msg
-port entries : (List Entry -> msg) -> Sub msg
-port filled : (Bool -> msg) -> Sub msg
 
 update : Msg -> Model -> (Model, Cmd Msg)
 update action model =
