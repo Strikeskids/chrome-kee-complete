@@ -1,42 +1,73 @@
-port module Main exposing (..)
-
-import Html.App as Html
+import Html.App as App
 import Html exposing (Html, div, text)
 
-type alias Model =
-  {}
+import KdbConnection exposing ( Entry )
+import Unlocker
 
-{- TODO: Fill -}
-type alias Entry =
-  { uuid : String
-  , fields : }
-
-type Msg
-  = Cry
-
-main = Html.program 
+main = App.program 
   { init = init
   , update = update
   , subscriptions = subscriptions
   , view = view
   }
 
-model = {}
+type alias Model =
+  { unlocked : Bool
+  , unlocker : Unlocker.Model
+  }
 
 init : (Model, Cmd Msg)
 init =
-  (model, Cmd.none)
+  let
+    (unlocker, ucmd) = Unlocker.init
+  in
+    ( Model
+        False
+        unlocker
+    )
+    !
+    [ Cmd.map UnlockerMsg ucmd
+    ]
+
+type Msg
+  = Nop
+  | DatabaseUnlocked
+  | DatabaseLocked
+  | UnlockerMsg Unlocker.Msg
 
 update : Msg -> Model -> (Model, Cmd Msg)
 update action model =
   case action of
-    Cry ->
-      ( model, Cmd.none )
+    Nop ->
+      model ! []
+
+    DatabaseUnlocked ->
+      { model | unlocked = True } ! []
+
+    DatabaseLocked ->
+      { model | unlocked = False } ! []
+
+    UnlockerMsg msg ->
+      let
+        (newUnlocker, cmd) = Unlocker.update msg model.unlocker
+      in
+        { model | unlocker = newUnlocker } ! [ Cmd.map UnlockerMsg cmd ]
 
 subscriptions : Model -> Sub Msg
 subscriptions model =
-  Sub.none
+  Sub.batch
+    [ KdbConnection.subscriptions
+        Nop
+        (\x -> if x then DatabaseUnlocked else DatabaseLocked)
+        (always Nop)
+        (always Nop)
+    ]
 
 view : Model -> Html Msg
 view model =
-  div [] [text "Hello World"]
+  if not model.unlocked then
+    Unlocker.view model.unlocker
+      |> App.map UnlockerMsg
+
+  else
+    text "Hello World"
