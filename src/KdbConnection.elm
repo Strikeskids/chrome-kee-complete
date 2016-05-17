@@ -1,11 +1,10 @@
 port module KdbConnection exposing
   ( Entry
   , unlock, readEntries, fill
-  , receive
+  , unlocked, entries, filled, subscriptions
   )
 
-import Json.Decode exposing ( (:=), bool, string )
-import Json.Decode as Json
+import Json.Decode as Json exposing ( (:=), bool, string )
 import Dict exposing ( Dict )
 
 
@@ -26,10 +25,21 @@ fill : String -> Cmd msg
 fill entryUuid =
   kdbxRequest { baseRequest | fill = Just entryUuid }
 
-receive : msg -> (Bool -> msg) -> (List Entry -> msg) -> (Bool -> msg) -> Sub msg
-receive invalid unlocked entries filled =
-  kdbxResponse (Json.decodeValue (signs unlocked entries filled)
-    >> Result.withDefault invalid)
+unlocked = subscription unlockedSign
+entries = subscription entrySign
+filled = subscription filledSign
+
+subscription : Json.Decoder t -> msg -> (t -> msg) -> Sub msg
+subscription decoder invalid f =
+  kdbxResponse
+    (Json.decodeValue (Json.map f decoder)
+      >> Result.withDefault invalid)
+
+subscriptions : msg -> (Bool -> msg) -> (List Entry -> msg) -> (Bool -> msg) -> Sub msg
+subscriptions invalid unlocked entries filled =
+  kdbxResponse
+    (Json.decodeValue (signs unlocked entries filled)
+      >> Result.withDefault invalid)
 
 
 port kdbxRequest : KdbxRequest -> Cmd msg
@@ -50,13 +60,9 @@ entry =
     (Json.at ["uuid", "id"] Json.string)
     (Json.at ["fields"] (Json.dict Json.string))
 
-entries : Json.Decoder (List Entry)
-entries =
-  Json.list entry
-
 entrySign : Json.Decoder (List Entry)
 entrySign =
-  ("entries" := entries)
+  ("entries" := (Json.list entry))
 
 unlockedSign : Json.Decoder Bool
 unlockedSign =
