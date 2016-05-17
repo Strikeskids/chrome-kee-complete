@@ -1,8 +1,8 @@
 module Unlocker exposing
-  ( init, update, view, subscriptions
+  ( Model, Msg, init, update, view, subscriptions
   )
 
-import Html exposing ( form, input, button, text )
+import Html exposing ( Html, form, input, button, text )
 import Html.Events exposing ( onSubmit, onInput )
 import Html.Attributes exposing ( type', autofocus, classList, value )
 import KdbConnection
@@ -25,7 +25,8 @@ type Msg
   | PasswordValue String
   | SubmitPassword
 
-update model action =
+update : Msg -> Model -> (Model, Cmd Msg)
+update action model =
   case action of
     Nop ->
       model ! []
@@ -48,12 +49,14 @@ update model action =
         , password = s
       } ! []
 
+subscriptions : Model -> Sub Msg
 subscriptions model =
   Sub.batch
     [ KdbConnection.unlocked Nop
         (\x -> if x then ValidPassword else InvalidPassword)
     ]
 
+view : Model -> Html Msg
 view model =
   form [ onSubmit SubmitPassword ]
     [ input
