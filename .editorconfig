@@ -8,4 +8,4 @@ indent_style = space
 charset = utf-8
 
 [*.elm]
-indent_size = 2
+indent_size = 4
