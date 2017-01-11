@@ -88,4 +88,4 @@ subscriptions model =
 
 view : Model -> Html.Html Msg
 view model =
-    text "hello"
+    text "This is an Entry List"
