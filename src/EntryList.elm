@@ -10,7 +10,7 @@ module EntryList
         , hostnameFilter
         )
 
-import Html exposing (text)
+import Html exposing (Html, text)
 import Dict
 import KdbConnection exposing (Entry)
 
@@ -88,7 +88,7 @@ subscriptions model =
         ]
 
 
-view : Model -> Html.Html Msg
+view : Model -> Html Msg
 view model =
     text "This is an Entry List"
 
