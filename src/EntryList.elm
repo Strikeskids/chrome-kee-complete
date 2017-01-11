@@ -7,9 +7,11 @@ module EntryList
         , update
         , subscriptions
         , view
+        , hostnameFilter
         )
 
 import Html exposing (text)
+import Dict
 import KdbConnection exposing (Entry)
 
 
@@ -89,3 +91,13 @@ subscriptions model =
 view : Model -> Html.Html Msg
 view model =
     text "This is an Entry List"
+
+
+hostnameFilter : String -> Filter
+hostnameFilter hostname e =
+    case Dict.get "URL" e.fields of
+        Nothing ->
+            False
+
+        Just url ->
+            String.contains hostname url || String.contains url hostname

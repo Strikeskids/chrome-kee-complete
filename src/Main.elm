@@ -30,16 +30,6 @@ type alias Flags =
     }
 
 
-hostnameFilter : String -> EntryList.Filter
-hostnameFilter hostname e =
-    case Dict.get "URL" e.fields of
-        Nothing ->
-            False
-
-        Just url ->
-            String.contains hostname url || String.contains url hostname
-
-
 init : Flags -> ( Model, Cmd Msg )
 init { hostname } =
     let
@@ -47,7 +37,7 @@ init { hostname } =
             Unlocker.init
 
         ( entries, ecmd ) =
-            EntryList.init (hostnameFilter hostname)
+            EntryList.init (EntryList.hostnameFilter hostname)
     in
         (Model False unlocker entries hostname)
             ! [ Cmd.map UnlockerMsg ucmd
