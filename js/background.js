@@ -1,3 +1,4 @@
+console.log('Init')
 chrome.runtime.onInstalled.addListener(setup)
 
 function setup() {

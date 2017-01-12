@@ -1,0 +1,17 @@
+{
+  "name": "chrome-kee-complete",
+  "version": "0.0.1",
+  "description": "Autocomplete passwords from kdbx files in Google Chrome",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Strikeskids",
+  "license": "BSD-3-Clause",
+  "devDependencies": {
+    "copy-webpack-plugin": "^4.0.1",
+    "elm-webpack-loader": "^4.2.0",
+    "file-loader": "^0.9.0",
+    "webpack": "^2.2.0-rc.4"
+  }
+}
